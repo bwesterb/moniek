@@ -1,11 +1,9 @@
 from django.conf.urls.defaults import *
 
-# Uncomment the next two lines to enable the admin:
-# from django.contrib import admin
-# admin.autodiscover()
+import moniek.accounting.views as views
 
 urlpatterns = patterns('',
-    (r'^accounting/', include('moniek.accounting.urls')),
+    (r'^/?', views.home),
     # Example:
     # (r'^moniek/', include('moniek.foo.urls')),
 
