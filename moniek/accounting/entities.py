@@ -83,7 +83,7 @@ class Commodity(Entity):
 		self._data['class'] = value._id
 	klass = property(get_class, set_class)
 
-	@proprety
+	@property
 	def valuations(self):
 		return {k:pair_to_decimal(v)
 				for k, v in self._data['valuations']}
@@ -134,7 +134,7 @@ def of_type(t):
 accounts = functools.partial(of_type, T_ACCOUNT)
 commodities = functools.partial(of_type, T_COMMODITY)
 mutations = functools.partial(of_type, T_MUTATION)
-transactions = functools.partial(of_type, T_TRANSACTIONS)
+transactions = functools.partial(of_type, T_TRANSACTION)
 commodityClasses = functools.partial(of_type, T_COMMODITY_CLASS)
 
 def ensure_indices():

@@ -1,8 +1,8 @@
 import pymongo
-from django.conf.settings import MONGO_DB, MONGO_HOST
+from django.conf import settings
 
-conn = pymongo.Connection(MONGO_HOST)
-db = conn[MONGO_DB]
+conn = pymongo.Connection(settings.MONGO_HOST)
+db = conn[settings.MONGO_DB]
 
 class SONWrapper(object):
 	def __init__(self, data, collection, parent=None):
