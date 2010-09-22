@@ -139,9 +139,9 @@ class Mutation(Entity):
 	transaction = property(get_transaction, set_transaction)
 
 	def get_value(self):
-		raise NotImplemented
+		return Amount(self._data['value'])
 	def set_value(self, value):
-		raise NotImplemented
+		self._data['value'] = value._data
 	value = property(get_value, set_value)
 
 class Transaction(Entity):
