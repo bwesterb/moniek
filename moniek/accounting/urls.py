@@ -3,7 +3,8 @@ from django.conf.urls.defaults import *
 import moniek.accounting.views as views
 
 urlpatterns = patterns('',
-    (r'^/?', views.home),
+    url(r'^/?$', views.home, name='home'),
+    url(r'^accounts/?$', views.accounts, name='accounts'),
     # Example:
     # (r'^moniek/', include('moniek.foo.urls')),
 
