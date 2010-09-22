@@ -90,6 +90,33 @@ class Commodity(Entity):
 		return {k:pair_to_decimal(v)
 				for k, v in self._data['valuations']}
 
+class Amount(object):
+	def __init__(self, data):
+		self._data = dict()
+
+	def __repr__(self):
+		return "Amount(%s)" % repr(self._data)
+
+	@staticmethod
+	def _coordwise_op(op, args):
+		data = {}
+		comids = set()
+		for arg in args:
+			comids.extend(arg._data.iterkeys())
+		for comid in comids:
+			data[comid] = op(*[arg._data[comid] for arg in args
+					if comid in arg._data])
+		return Amount(data)
+
+	@staticmethod
+	def add(*summands):
+		cw_binadd = lambda x,y: x+y
+		cw_add = lambda *sms: reduce(cw_binadd, sms, 0) 
+		return _coordwise_op(cw_add, summands)
+
+	def __add__(self, other):
+		Amount.add(self, other)
+
 class Mutation(Entity):
 	def get_account(self):
 		return by_id(self._data['account'])
