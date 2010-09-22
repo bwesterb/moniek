@@ -92,7 +92,7 @@ class Commodity(Entity):
 
 class Amount(object):
 	def __init__(self, data):
-		self._data = dict()
+		self._data = data
 
 	def __repr__(self):
 		return "Amount(%s)" % repr(self._data)
@@ -102,7 +102,7 @@ class Amount(object):
 		data = {}
 		comids = set()
 		for arg in args:
-			comids.extend(arg._data.iterkeys())
+			comids.update(arg._data.iterkeys())
 		for comid in comids:
 			data[comid] = op(*[arg._data[comid] for arg in args
 					if comid in arg._data])
@@ -112,17 +112,17 @@ class Amount(object):
 	def add(*summands):
 		cw_binadd = lambda x,y: x+y
 		cw_add = lambda *sms: reduce(cw_binadd, sms, 0) 
-		return _coordwise_op(cw_add, summands)
+		return Amount._coordwise_op(cw_add, summands)
 
 	def __add__(self, other):
-		Amount.add(self, other)
+		return Amount.add(self, other)
 
 	def scale(self, scalar):
 		scale_op = lambda val: scalar * val 
-		return _coordwise_op(scale_op, (self,))
+		return Amount._coordwise_op(scale_op, (self,))
 
 	def __rmul__(self, scalar):
-		self.scale(scalar)
+		return self.scale(scalar)
 
 
 class Mutation(Entity):
