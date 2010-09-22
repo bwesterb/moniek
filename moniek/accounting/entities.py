@@ -117,6 +117,14 @@ class Amount(object):
 	def __add__(self, other):
 		Amount.add(self, other)
 
+	def scale(self, scalar):
+		scale_op = lambda val: scalar * val 
+		return _coordwise_op(scale_op, (self,))
+
+	def __rmul__(self, scalar):
+		self.scale(scalar)
+
+
 class Mutation(Entity):
 	def get_account(self):
 		return by_id(self._data['account'])
