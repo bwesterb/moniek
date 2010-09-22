@@ -102,7 +102,9 @@ class Amount(object):
 		self._data = data
 
 	def __repr__(self):
-		return "Amount(%s)" % repr(self._data)
+		pieces = ["%s x %s" % (pair_to_decimal(value), comid)
+			for comid,value in self._data.iteritems()]
+		return "<Amount:   %s>" % '  +  '.join(pieces)
 
 	@staticmethod
 	def _coordwise_op(op, args):
