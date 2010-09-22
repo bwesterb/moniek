@@ -217,7 +217,7 @@ def next_ids(n):
 def next_id():
 	result = db.command(SON((
 		('findandmodify', 'entityCounter'),
-		('query', {}),
-		('upsert', True),
+		('query', {"x": {"$exists": True}}),
+		('upsert', False),
 		('update', {'$inc': {'x': 1}}))))
 	return int(result['value']['x'])
