@@ -87,8 +87,8 @@ class Commodity(Entity):
 
 	@property
 	def valuations(self):
-		return {k:pair_to_decimal(v)
-				for k, v in self._data['valuations']}
+		return dict((k,pair_to_decimal(v))
+				for k, v in self._data['valuations'])
 
 class Amount(object):
 	def __init__(self, data):
