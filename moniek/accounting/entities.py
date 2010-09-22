@@ -1,6 +1,8 @@
 import decimal
 import functools
 
+from pymongo.son import SON
+
 from django.db.models import permalink
 
 from moniek.accounting.mongo import db, SONWrapper
@@ -164,8 +166,18 @@ mutations = functools.partial(of_type, T_MUTATION)
 transactions = functools.partial(of_type, T_TRANSACTION)
 commodityClasses = functools.partial(of_type, T_COMMODITY_CLASS)
 
-def ensure_indices():
+def prepare_database():
 	ecol.ensure_index('type')
 	ecol.ensure_index('parent')
 	ecol.ensure_index('account')
 	ecol.ensure_index('transaction')
+	db['entityCounter'].remove()
+	db['entityCounter'].insert({'x':0})
+
+def next_id():
+	result = db.command(SON((
+		('findandmodify', 'entityCounter'),
+		('query', {}),
+		('upsert', True),
+		('update', {'$inc': {'x': 1}}))))
+	return int(result['value']['x'])
