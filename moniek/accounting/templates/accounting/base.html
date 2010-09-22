@@ -1,0 +1,26 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+	"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+	<head>
+		{% block head %}
+		<title>{% block title %}Moniek{% endblock %}</title>
+		<link href="{{ MEDIA_URL }}/accounting/base.css"
+			rel="stylesheet" type="text/css" />
+		{% endblock %}
+	</head>
+	<body>
+		<ul id="menu">
+			{% block menu %}
+			<li><a href="{% url home %}">Home</a></li>
+			<li><a href="{% url accounts %}">Accounts</a></li>
+			{% endblock %}
+		</ul>
+		<div id="main">
+			{% block main %}
+			{% endblock %}
+		</div>
+		<div id="footer">
+			&copy; 2010, Bas &amp; Bram Westerbaan
+		</div>
+	</body>
+</html>
