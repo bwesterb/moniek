@@ -43,9 +43,6 @@ class Entity(SONWrapper):
 	@property
 	def id(self):
 		return str(self._id)
-	@property
-	def _id(self):
-		return self._id
 	#@permalink
 	#def get_absolute_url(self):
 	#	return ('entity-by-id', (), {'_id': self.id})
