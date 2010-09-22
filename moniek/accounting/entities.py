@@ -9,6 +9,7 @@ from moniek.accounting.mongo import db, SONWrapper
 
 ecol = db['entities']
 
+# concerning representing a decimal.Decimal as a pair
 def decimal_to_pair(dec):
 	if dec._exp >= 0:
 		return (0, int(dec))
@@ -16,6 +17,12 @@ def decimal_to_pair(dec):
 
 def pair_to_decimal(pair):
 	return decimal.Decimal(pair[1]) / (10**pair[0])
+
+def pair_lift_op(op):
+	"""Given an operation on decimals, returns the corresponding"""
+	""" operation on pairs."""
+	return lambda *args: decimal_to_pair(op(*[pair_to_decimal(arg)
+		for arg in args]))
 
 def by_id(n):
 	return entity(ecol.find_one({'_id': n}))
@@ -110,16 +117,19 @@ class Amount(object):
 
 	@staticmethod
 	def add(*summands):
-		cw_binadd = lambda x,y: x+y
-		cw_add = lambda *sms: reduce(cw_binadd, sms, 0) 
-		return Amount._coordwise_op(cw_add, summands)
+		bin_add = lambda x,y: x+y
+		pair_bin_add = pair_lift_op(bin_add)
+		pair_add = lambda *sms: reduce(pair_bin_add, sms, 
+				decimal_to_pair(decimal.Decimal(0))) 
+		return Amount._coordwise_op(pair_add, summands)
 
 	def __add__(self, other):
 		return Amount.add(self, other)
 
 	def scale(self, scalar):
-		scale_op = lambda val: scalar * val 
-		return Amount._coordwise_op(scale_op, (self,))
+		scale = lambda val: scalar * val 
+		pair_scale = pair_lift_op(scale)
+		return Amount._coordwise_op(pair_scale, (self,))
 
 	def __rmul__(self, scalar):
 		return self.scale(scalar)
