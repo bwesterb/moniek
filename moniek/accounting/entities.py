@@ -194,29 +194,14 @@ def prepare_database():
 	db['entityCounter'].insert({'x':0})
 
 def next_ids(n):
-	ninjaed = []
-	while n>0:
-		estimate = db.entityCounter.find_one()['x']
-		target = estimate + n
-		try:
-			result = db.command(SON((
-				('findandmodify', 'entityCounter'),
-				('query', {"x": {"$lt": target}}),
-				('new', False),
-				('upsert', False),
-				('update', {'$set': {'x': target}}))))
-		except OperationFailure:
-			# at least someone got served; let's try again.
-			continue
-		actual = result['value']['x']
-		ninjaed = range(actual, target)
-		n -= len(ninjaed)
-	return ninjaed
-
-def next_id():
 	result = db.command(SON((
 		('findandmodify', 'entityCounter'),
 		('query', {"x": {"$exists": True}}),
 		('upsert', False),
-		('update', {'$inc': {'x': 1}}))))
-	return int(result['value']['x'])
+		('new', False),
+		('update', {'$inc': {'x': n}}))))
+	old_counter = int(result['value']['x'])
+	return range(old_counter, old_counter+n)
+
+def next_id():
+	return next_ids(1)[0]
