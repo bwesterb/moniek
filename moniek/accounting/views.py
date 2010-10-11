@@ -6,4 +6,6 @@ def home(request):
 	return render_to_response('accounting/home.html', {},
 			RequestContext(request))
 def accounts(request):
-	return HttpResponse("Hi")
+	return render_to_response('accounting/accounts.html', {},
+			RequestContext(request))
+
