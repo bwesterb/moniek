@@ -1,4 +1,8 @@
 from django.conf.urls.defaults import *
+from django.conf import settings
+
+from moniek.base.views import direct_to_folder
+
 
 # Uncomment the next two lines to enable the admin:
 # from django.contrib import admin
@@ -6,13 +10,6 @@ from django.conf.urls.defaults import *
 
 urlpatterns = patterns('',
     (r'^accounting/', include('moniek.accounting.urls')),
-    # Example:
-    # (r'^moniek/', include('moniek.foo.urls')),
-
-    # Uncomment the admin/doc line below and add 'django.contrib.admindocs' 
-    # to INSTALLED_APPS to enable admin documentation:
-    # (r'^admin/doc/', include('django.contrib.admindocs.urls')),
-
-    # Uncomment the next line to enable the admin:
-    # (r'^admin/', include(admin.site.urls)),
+    (r'^media/(?P<subdir>.*)', direct_to_folder,
+	    {'root': settings.MEDIA_ROOT}),
 )
