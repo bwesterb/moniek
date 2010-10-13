@@ -38,6 +38,10 @@ class Entity(SONWrapper):
 	def __init__(self, data):
 		if '_id' not in data:
 			data['_id'] = next_id()
+		if 'description' not in data:
+			data['description'] = ''
+		if 'name' not in data:
+			data['name'] = ''
 		super(Entity, self).__init__(data, ecol)
 	@property
 	def type(self):
