@@ -67,7 +67,8 @@ class Entity(SONWrapper):
 	description = property(get_description, set_description)
 
 	def __repr__(self):
-		return "<Entity %s (%s)>" % (self.id, self.type)
+		return "<Entity %s (%s) %s>" % (self.id, self.type, 
+				repr(self.name))
 
 	def as_account(self): return Account(self._data)
 	def as_commodity(self): return Commodity(self._data)
