@@ -1,5 +1,6 @@
 import decimal
 import functools
+from warnings import warn
 
 from pymongo.son import SON
 
@@ -25,14 +26,15 @@ def pair_lift_op(op):
 		for arg in args]))
 
 def by_id(n):
-	return entity(ecol.find_one({'_id': n}))
+	return Entity(ecol.find_one({'_id': n}))
 
 def all():
 	for m in ecol.find():
-		yield entity(m)
+		yield Entity(m)
 
-def entity(d):
-	return TYPE_MAP[d['type']](d)
+def entity(data):
+	warn('use Entity instead', DeprecationWarning)
+	return Entity(data)
 
 class Entity(SONWrapper):
 	def __init__(self, data):
@@ -43,6 +45,10 @@ class Entity(SONWrapper):
 		if 'name' not in data:
 			data['name'] = ''
 		super(Entity, self).__init__(data, ecol)
+	def __new__(cls, data):
+		typeCls = TYPE_MAP[data['type']]
+		return object.__new__(typeCls)
+	
 	@property
 	def type(self):
 		return self._data['type']
@@ -86,7 +92,7 @@ class Account(Entity):
 
 	@property
 	def children(self):
-		return map(entity, ecol.find({'parent': self._id,
+		return map(Entity, ecol.find({'parent': self._id,
 					      'type': T_ACCOUNT}))
 
 class Commodity(Entity):
