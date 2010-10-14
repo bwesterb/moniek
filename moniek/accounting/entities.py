@@ -115,7 +115,14 @@ class Amount(object):
 		pieces = ["%s x %s" % (pair_to_decimal(value), comid)
 			for comid,value in self._data.iteritems()]
 		return "<Amount:   %s>" % '  +  '.join(pieces)
-
+	
+	def __getitem__(self, idx):
+		return pair_to_decimal(self._data[idx])
+	def __setitem__(self, idx, value):
+		self._data[idx] = decimal_to_pair(value)
+	def __delitem__(self, idx):
+		del self._data[idx]
+	
 	@staticmethod
 	def _coordwise_op(op, args):
 		data = {}
