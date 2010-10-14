@@ -1,5 +1,4 @@
 #!/usr/bin/env ipython -i
-import _import
-
+import moniek.env
 from moniek.accounting.entities import *
 
