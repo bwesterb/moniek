@@ -1,5 +1,5 @@
 # env.py
-#   sets up the django environment and mailman for the utils
+#   sets up the django environment
 #
 
 import os
